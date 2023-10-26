@@ -1,0 +1,9 @@
+Thong tin danh sach cong viec:
+-----------------------------------
+STT: 3
+Trang thai: Chua_hoan_thanh
+Tieu de: Cong_viec_3
+Muc do quan trong: Trong_ba_ngay
+Ngay hien tai: 12/6/2013
+Ngay ket thuc: 22/05/2022
+Ghi chu: Ghi_chu_ngan_thoyyy
