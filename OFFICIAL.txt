@@ -1,9 +1,73 @@
 Thong tin danh sach cong viec:
 -----------------------------------
+STT: 1
+Trang thai: Dang lam
+Tieu de: Di hoc DSTT
+Muc do quan trong: Trong tuan
+Ngay hien tai: 14/9/2023
+Ngay ket thuc: 23/11/2023
+Ghi chu: Co Hai Yen day mon nay nha hihi <3 iu cooo
+-----------------------------------
+STT: 2
+Trang thai: Bi huy
+Tieu de: An toi
+Muc do quan trong: Trong ba ngay
+Ngay hien tai: 1/5/2023
+Ngay ket thuc: 1/6/2023
+Ghi chu: Bi huy. Tai vi mac 1 chiec vay xink ngoi cho anh qua nhma anh hong quaa=))) (test tinh nang thoi chu tin fake nhe. Anh uy tin)
+-----------------------------------
 STT: 3
-Trang thai: Chua_hoan_thanh
-Tieu de: Cong_viec_3
-Muc do quan trong: Trong_ba_ngay
-Ngay hien tai: 12/6/2013
-Ngay ket thuc: 22/05/2022
-Ghi chu: Ghi_chu_ngan_thoyyy
+Trang thai: Hoan thanh
+Tieu de: Chay bo
+Muc do quan trong: Trong ngay
+Ngay hien tai: 14/2/2023
+Ngay ket thuc: 15/2/2023
+Ghi chu: Muon khoe dep thi hay tap the thao <3
+-----------------------------------
+STT: 4
+Trang thai: Hoan thanh
+Tieu de: Giat do
+Muc do quan trong: Trong hai tuan
+Ngay hien tai: 23/6/2023
+Ngay ket thuc: 25/7/2024
+Ghi chu: Hehe da xonggggg
+-----------------------------------
+STT: 5
+Trang thai: Hoan thanh
+Tieu de: Lam do a'n ITMC
+Muc do quan trong: Trong ba ngay
+Ngay hien tai: 5/10/2023
+Ngay ket thuc: 14/11/2023
+Ghi chu: Xong truoc do may hom roi nhung lau lau mo len lai muon chinh them cho vua mat. => Nop sat gio:))) 
+-----------------------------------
+STT: 6
+Trang thai: Hoan thanh
+Tieu de: Di qua KTX khu A coi Dalab dien <3
+Muc do quan trong: Trong tuan
+Ngay hien tai: 29/10/2023
+Ngay ket thuc: 29/10/2023
+Ghi chu: Hen luc do xong do a'n ITMC nen di duoc <3 hihi
+-----------------------------------
+STT: 7
+Trang thai: Qua han
+Tieu de: Mua kem chong nang
+Muc do quan trong: Trong hai tuan
+Ngay hien tai: 13/7/2020
+Ngay ket thuc: 29/7/2020
+Ghi chu: Het voucher nen khum mua nua :(
+-----------------------------------
+STT: 8
+Trang thai: Dang lam
+Tieu de: Truc nhat
+Muc do quan trong: Trong hai tuan
+Ngay hien tai: 12/3/2000
+Ngay ket thuc: 21/3/2004
+Ghi chu: Cham chi truc nhat vi minh ky tinh:>
+-----------------------------------
+STT: 9
+Trang thai: Chua hoan thanh
+Tieu de: Di ngu som
+Muc do quan trong: Trong tuan
+Ngay hien tai: 14/9/2023
+Ngay ket thuc: 14/9/2030
+Ghi chu: Kho' do chua xong do an do huhu T^T

@@ -1,4 +1,5 @@
 #include <string>
+#include <sstream>
 #include <fstream>
 #include <cstring>
 #include <iomanip>
@@ -6,267 +7,274 @@
 #include <algorithm>
 using namespace std;
 
-int stt, kq1, kq2, kq3, kq4, kq5, kq6,
+bool check[10000];
+const int oo = -1e9;
+int ind, res1, res2, res3, res4, res5, res6,
     TT1, TT2, TT3, TT4, TT5;
-bool check[1000];
 
-struct congviec{
-    string trang_thai, tieu_de, do_uu_tien, bat_dau, ket_thuc, note;
-    int mark, stt, month = 0, day = 0, year = 0;
+struct task{
+    string status, title, priority, beginningDay, endingDay, note;
+    int mark, stt, day, month, year;
 
-    void muc_do_hoan_thanh(string s){ //Phan loai trang thai de dung cho sap xep/loc/tim kiem
-        if (s == "Chua_hoan_thanh"){
-            stt = 1;
+    void correspondingStatus(){ //Phân loại số thành trạng thái tương ứng
+        if (stt == 1){
+            status = "Chua hoan thanh";
         }
-        else if (s == "Dang_lam"){
-            stt = 2;
+        else if (stt == 2){
+            status = "Dang lam";
         }
-        else if (s == "Hoan_thanh"){
-            stt = 3;
+        else if (stt == 3){
+            status = "Hoan thanh";
         }
-        else if (s == "Bi_huy"){
-            stt = 4;
+        else if (stt == 4){
+            status = "Bi huy";
         }
-        else if (s == "Qua_han"){
-            stt = 5;
+        else if (stt == 5){
+            status = "Qua han";
         }
     }
 
-    void danh_dau_quan_trong(string s){//Phan loai do uu tien de dung cho sap xep/loc/tim kiem
-        if (s == "Trong_ngay"){
-            mark = 1;
+    void correspondingPrio(){//Phân loại số thành độ ưu tiên tương ứng
+        if (mark == 1){
+            priority = "Trong ngay";
         }
-        else if (s == "Trong_ba_ngay"){
-            mark = 2;
+        else if (mark == 2){
+            priority = "Trong ba ngay";
         }
-        else if (s == "Trong_tuan"){
-            mark = 3;
+        else if (mark == 3){
+            priority = "Trong tuan";
         }
-        else if (s == "Trong_hai_tuan"){
-            mark = 4;
+        else if (mark == 4){
+            priority = "Trong hai tuan";
         }
-        else if (s == "Trong_thang"){
-            mark = 5;
+        else if (mark == 5){
+            priority = "Trong thang";
         }
     }
 
-    void them_thong_tin(){
-        cout <<"===================================\n";
-        cout << "Nhap trang thai: "; cin >> trang_thai;
-        cout << "Nhap tieu de: "; //cin.ignore(); getline(cin, tieu_de);
-        cin >> tieu_de;
-        cout << "Nhap muc do quan trong: "; cin >> do_uu_tien;
-        muc_do_hoan_thanh(trang_thai); //Phan loai trang thai de dung cho sap xep/loc/tim kiem
-        danh_dau_quan_trong(do_uu_tien);//Phan loai trang thai de dung cho sap xep/loc/tim kiem
-        cout << "Nhap ngay bat dau: "; cin >> bat_dau;
-        cout << "Nhap ngay ket thuc: "; cin >> ket_thuc;
-        cout << "Nhap ghi chu: "; //cin.ignore(); getline(cin, note);
-        cin >>  note;
-        cout <<"===================================\n";
+    void addData(){ // Thêm dữ liệu (Nhập tay)
+        cout <<"================================================\n";
+        
+        cout << "Hay chon trang thai cua cong viec: \n";
+        cout << "[1]: Chua hoan thanh\n";
+        cout << "[2]: Dang lam\n";
+        cout << "[3]: Hoan thanh\n";
+        cout << "[4]: Bi huy\n";
+        cout << "[5]: Qua han\n";
+        cout << "Nhap lua chon cho trang thai: "; 
+        cin >> stt;
+
+        cout << "Nhap tieu de: "; cin.ignore(); getline(cin, title);
+
+        cout << "Hay chon muc do quan trong cua cong viec: \n";
+        cout << "[1]: Trong ngay\n";
+        cout << "[2]: Trong ba ngay\n";
+        cout << "[3]: Trong tuan\n";
+        cout << "[4]: Trong hai tuan\n";
+        cout << "[5]: Trong thang\n";
+        cout << "Nhap muc do quan trong: "; cin >> mark;
+
+        correspondingStatus(); //Phan loai trang thai de dung cho sap xep/loc/tim kiem
+        correspondingPrio();//Phan loai trang thai de dung cho sap xep/loc/tim kiem
+
+        cout << "Nhap ngay bat dau: "; cin >> beginningDay;
+        cout << "Nhap ngay ket thuc: "; cin >> endingDay;
+        cout << "Nhap ghi chu: "; cin.ignore(); getline(cin, note);
+        //cin >>  note;
+        cout << "================================================\n";
     }
 
-    void in_thong_tin(){
+    void printData(){ //Xuất dữ liệu (Màn hình)
         cout << "-----------------------------------\n";
-        cout << "Trang thai: " << trang_thai << '\n';
-        cout << "Tieu de: " << tieu_de << '\n';
-        cout << "Muc do quan trong: " << do_uu_tien << '\n';
-        cout << "Ngay bat dau: " << bat_dau << '\n';
-        cout << "Ngay ket thuc: " << ket_thuc << '\n';
+        cout << "Trang thai: " << status << '\n';
+        cout << "Tieu de: " << title << '\n';
+        cout << "Muc do quan trong: " << priority << '\n';
+        cout << "Ngay bat dau: " << beginningDay << '\n';
+        cout << "Ngay ket thuc: " << endingDay << '\n';
         cout << "Ghi chu: " << note << '\n';
     }
 
-    void phan_tich(){ //chuyen tu string -> int de sap xep ngay thang nam
+    void dateAnalysis(){ //chuyen tu string -> int de sap xep ngay thang nam
         int i = 0;
-        while (ket_thuc[i] != '/'){
-            day = day * 10 + (ket_thuc[i] - '0'); 
+        day = 0, month = 0, year = 0;
+        while (endingDay[i] != '/'){
+            day = day * 10 + (endingDay[i] - '0'); 
             i++;
         }
         i++;
-        while (ket_thuc[i] != '/'){
-            month = month * 10 + (ket_thuc[i] - '0'); 
+        while (endingDay[i] != '/'){
+            month = month * 10 + (endingDay[i] - '0'); 
             i++;
         }
         i++;
         int j = i;
-        for (int j = i; j < ket_thuc.length(); j++){
-            year = year * 10 + (ket_thuc[j] - '0'); 
+        for (int j = i; j < endingDay.length(); j++){
+            year = year * 10 + (endingDay[j] - '0'); 
         }        
     }
 };
 
-void in_danh_sach(congviec a[], int n){
-    cout <<"===================================\n";
+void printList(task a[], int n){ //In danh sách (Màn hình)
+    cout <<"================================================\n";
     cout << "Thong tin danh sach cong viec:\n";
     for (int i = 0; i < n; i++){
         cout <<"-----------------------------------\n";
         cout << "STT: " << i + 1 << "\n";
-        a[i].in_thong_tin();
+        a[i].printData();
     }
 }
 
-void xoa(congviec a[], int &n, int stt){
+void removeData(task a[], int &n, int stt){ //Xóa dữ liệu
     for (int i = stt + 1; i < n; i++){
         a[i - 1] = a[i];
     }
     n -= 1;
 }
 
-void chinhsua(congviec a[], int stt){
+void edit(task a[], int stt){ //Chỉnh sửa
     int tmp;
-    cout << "1: Chinh sua trang thai\n";
-    cout << "2: Chinh sua tieu de\n";
-    cout << "3: Chinh sua muc do quan trong\n";
-    cout << "4: Chinh sua ngay bat dau\n";
-    cout << "5: Chinh sua ngay ket thuc\n";
-    cout << "6: Chinh sua ghi chu\n";
+    cout << "[1]: Chinh sua trang thai\n";
+    cout << "[2]: Chinh sua tieu de\n";
+    cout << "[3]: Chinh sua muc do quan trong\n";
+    cout << "[4]: Chinh sua ngay bat dau\n";
+    cout << "[5]: Chinh sua ngay ket thuc\n";
+    cout << "[6]: Chinh sua ghi chu\n";
     cout << "Hay nhap so: ";
     cin >> tmp;
     if (tmp == 1){
-        cin >> a[stt].trang_thai;
+        cout << "\nHay chinh sua trang thai cua cong viec!!! \n";
+        cout << "[1]: Chua hoan thanh\n";
+        cout << "[2]: Dang lam\n";
+        cout << "[3]: Hoan thanh\n";
+        cout << "[4]: Bi huy\n";
+        cout << "[5]: Qua han\n";
+        cout << "Xin moi chinh sua trang thai: ";
+        cin >> a[stt].stt;
+        a[stt].correspondingStatus();
+        cout << "\nThao tac thanh cong. <3\n"; 
+        cout << "\nVui long an 1 trong 2 phim sau de xem ket qua:\n";
+        cout << "[2]: In danh sach cong viec ra man hinh\n";
+        cout << "[6]: In danh sach cong viec ra FILE TXT\n";
     }
     if (tmp == 2){
-        cin.ignore(); getline(cin, a[stt].tieu_de);
+        cout << "\nXin moi chinh sua tieu de: ";
+        cin.ignore(); getline(cin, a[stt].title);
+        cout << "\nThao tac thanh cong. <3\n"; 
+        cout << "\nVui long an 1 trong 2 phim sau de xem ket qua:\n";
+        cout << "[2]: In danh sach cong viec ra man hinh\n";
+        cout << "[6]: In danh sach cong viec ra FILE TXT\n";
     }
-    if (tmp == 3){
-        cin >> a[stt].do_uu_tien;
+    if (tmp == 3){        
+        cout << "\nHay chinh sua muc do quan trong cua cong viec: \n";
+        cout << "[1]: Trong ngay\n";
+        cout << "[2]: Trong ba ngay\n";
+        cout << "[3]: Trong tuan\n";
+        cout << "[4]: Trong hai tuan\n";
+        cout << "[5]: Trong thang\n";
+        cout << "\nXin moi chinh sua muc do quan trong: "; 
+        cin >> a[stt].mark;
+        a[stt].correspondingPrio();
+        cout << "\nThao tac thanh cong. <3\n"; 
+        cout << "\nVui long an 1 trong 2 phim sau de xem ket qua:\n";
+        cout << "[2]: In danh sach cong viec ra man hinh\n";
+        cout << "[6]: In danh sach cong viec ra FILE TXT\n";
     }
     if (tmp == 4){
-        cin >> a[stt].bat_dau;
+        cout << "\nXin moi chinh sua ngay bat dau cong viec: ";
+        cin >> a[stt].beginningDay;
+        cout << "\nThao tac thanh cong. <3\n"; 
+        cout << "\nVui long an 1 trong 2 phim sau de xem ket qua:\n";
+        cout << "[2]: In danh sach cong viec ra man hinh\n";
+        cout << "[6]: In danh sach cong viec ra FILE TXT\n";
     }
     if (tmp == 5){
-        cin >> a[stt].ket_thuc;
+        cout << "\nXin moi chinh sua ngay ket thuc cong viec: ";
+        cin >> a[stt].endingDay;
+        cout << "\nThao tac thanh cong. <3\n"; 
+        cout << "\nVui long an 1 trong 2 phim sau de xem ket qua:\n";
+        cout << "[2]: In danh sach cong viec ra man hinh\n";
+        cout << "[6]: In danh sach cong viec ra FILE TXT\n";
     }
     if (tmp == 6){
-         cin.ignore(); getline(cin, a[stt].note);
+        cout << "\nXin moi chinh sua ghi chu: ";
+        cin.ignore(); getline(cin, a[stt].note);
+        cout << "\nThao tac thanh cong. <3\n"; 
+        cout << "\nVui long an 1 trong 2 phim sau de xem ket qua:\n";
+        cout << "[2]: In danh sach cong viec ra man hinh\n";
+        cout << "[6]: In danh sach cong viec ra FILE TXT\n";
     }
 }
 
-void doc_du_lieu(congviec a[], int &n){
+void readFILE(task a[], int &n){ //ĐỌC từ FILE INP
     ifstream input_file;
     input_file.open("official.inp", ios::in);
     while (!input_file.eof()){
-        input_file >> a[n].trang_thai;
-        a[n].muc_do_hoan_thanh(a[n].trang_thai); 
-//        input_file.ignore(); getline(input_file, a[n].tieu_de);
-        input_file >> a[n].tieu_de;
-        input_file >> a[n].do_uu_tien;
-        a[n].danh_dau_quan_trong(a[n].do_uu_tien);
-        input_file >> a[n].bat_dau;
-        input_file >> a[n].ket_thuc;
-        input_file >> a[n].note;
+        string s, add[10], tmp;
+       // cin.ignore();
+         getline(input_file, s);
+    //    cout << s << '\n';
+        stringstream ss(s);
+        getline(ss, tmp, ',');
+        add[0] = tmp;
+        int size = 1;
+        while (getline(ss, tmp, ',')){
+            add[size] = tmp.erase(0,1);
+            size++;
+        }
+        a[n].stt = add[0][0] - '0';
+        a[n].correspondingStatus();
+        a[n].title = add[1];
+        a[n].mark = add[2][0] - '0';
+        a[n].correspondingPrio();
+        a[n].beginningDay = add[3];
+        a[n].endingDay = add[4];
+        a[n].note = add[5];
         n++;
     }
     input_file.close();
 }
 
-void xuat_du_lieu(congviec a[], int n){
+void printFILE(task a[], int n){ //Xuất ra FILE TXT
     ofstream output_file;
     output_file.open("OFFICIAL.txt", ios::trunc);
     output_file << "Thong tin danh sach cong viec:\n";
     for (int i = 0; i < n; i++){
         output_file << "-----------------------------------\n";
         output_file << "STT: " << i + 1 << "\n";
-        output_file << "Trang thai: " << a[i].trang_thai << '\n';
-        output_file << "Tieu de: " << a[i].tieu_de << '\n';
-        output_file << "Muc do quan trong: " << a[i].do_uu_tien << '\n';
-        output_file << "Ngay hien tai: " << a[i].bat_dau << '\n';
-        output_file << "Ngay ket thuc: " << a[i].ket_thuc << '\n';
+        output_file << "Trang thai: " << a[i].status << '\n';
+        output_file << "Tieu de: " << a[i].title << '\n';
+        output_file << "Muc do quan trong: " << a[i].priority << '\n';
+        output_file << "Ngay hien tai: " << a[i].beginningDay << '\n';
+        output_file << "Ngay ket thuc: " << a[i].endingDay << '\n';
         output_file << "Ghi chu: " << a[i].note << '\n';
     }
     output_file.close();
 }
-
-//====================Chuc nang TIM KIEM THEO YEU CAU================
-void tk_theo_trang_thai(congviec a[], string tmp, int n, bool check[], int choice){
-    kq1 = -1;
-    for (int i = 0; i < n; i++){
-        if (a[i].trang_thai.find(tmp) != string::npos){
-            kq1 = i;
-            check[i] = true;
-            if (choice == 2) a[i].in_thong_tin();
-        }
-    }
-}
-
-void tk_theo_tieu_de(congviec a[], string tmp, int n, bool check[], int choice){
-    kq2 = -1;
-    for (int i = 0; i < n; i++){
-        if ((check[i] == false) && (a[i].tieu_de.find(tmp) != string::npos)){
-            kq2 = i;
-            check[i] = true;
-            if (choice == 2) a[i].in_thong_tin();
-        }
-    }
-}
-
-void tk_theo_do_uu_tien(congviec a[], string tmp, int n, bool check[], int choice){
-    kq3 = -1;
-    for (int i = 0; i < n; i++){
-        if ((check[i] == false) && (a[i].do_uu_tien.find(tmp) != string::npos)){
-            kq3 = i;
-            check[i] = true;
-            if (choice == 2) a[i].in_thong_tin();
-        }
-    }
-}
-
-void tk_theo_ngay_BD(congviec a[], string tmp, int n, bool check[], int choice){
-    kq4 = -1;
-    for (int i = 0; i < n; i++){
-        if ((check[i] == false) && (a[i].bat_dau.find(tmp) != string::npos)){
-            kq4 = i;
-            check[i] = true;
-            if (choice == 2) a[i].in_thong_tin();
-        }
-    }
-}
-
-void tk_theo_ngay_KT(congviec a[], string tmp, int n, bool check[], int choice){
-    kq5 = -1;
-    for (int i = 0; i < n; i++){
-        if ((check[i] == false) && (a[i].ket_thuc.find(tmp) != string::npos)){
-            kq5 = i;
-            check[i] = true;
-            if (choice == 2) a[i].in_thong_tin();
-        }
-    }
-}
-
-void tk_theo_note(congviec a[], string tmp, int n, bool check[], int choice){
-    kq6 = -1;
-    for (int i = 0; i < n; i++){
-        if ((check[i] == false) && (a[i].note.find(tmp) != string::npos)){
-            kq6 = i;
-            check[i] = true;
-            if (choice == 2) a[i].in_thong_tin();
-        }
-    }
-}
-
-//nó sẽ cout cái tìm kiếm tạm thời ra file TXT:))
-void cout_tieu_de(){
+//nó sẽ cout cái dòng này ra file TXT:)) 
+void titleFILE(){
     ofstream output_file;
     output_file.open("OFFICIAL.txt", ios::trunc);
     output_file << "Thong tin danh sach cong viec:\n";
     output_file.close();
 }
 
-void cout_co_noi_dung(congviec a[], int i){
+//xử lí in từng thành phần của công việc ra file TXT
+void avaiDataFILE(task a[], int i){
     ofstream output_file;
     output_file.open("OFFICIAL.txt", ios::app);
-//    for (int i = 0; i < n; i++){
     output_file << "-----------------------------------\n";
     output_file << "STT: " << i + 1 << "\n";
-    output_file << "Trang thai: " << a[i].trang_thai << '\n';
-    output_file << "Tieu de: " << a[i].tieu_de << '\n';
-    output_file << "Muc do quan trong: " << a[i].do_uu_tien << '\n';
-    output_file << "Ngay hien tai: " << a[i].bat_dau << '\n';
-    output_file << "Ngay ket thuc: " << a[i].ket_thuc << '\n';
+    output_file << "Trang thai: " << a[i].status << '\n';
+    output_file << "Tieu de: " << a[i].title << '\n';
+    output_file << "Muc do quan trong: " << a[i].priority << '\n';
+    output_file << "Ngay hien tai: " << a[i].beginningDay << '\n';
+    output_file << "Ngay ket thuc: " << a[i].endingDay << '\n';
     output_file << "Ghi chu: " << a[i].note << '\n';    
     output_file.close();
 }
 
-void cout_Khong_KQ(){
+//sẽ in ra file TXT nếu ko có kết quả
+void noResFILE(){
     ofstream output_file;
     output_file.open("OFFICIAL.txt", ios::app);                
     output_file << "-----------------------------------\n";
@@ -274,56 +282,102 @@ void cout_Khong_KQ(){
     output_file.close();
 }
 
-void CN_1(congviec a[], string tmp, int n, int choice){
+//====================Chuc nang TIM KIEM THEO YEU CAU================
+void sttSearch(task a[], string tmp, int n, bool check[], int choice){
+    res1 = -1;
+    for (int i = 0; i < n; i++){
+        if (a[i].status.find(tmp) != string::npos){
+            res1 = i;
+            check[i] = true;
+            if (choice == 2) a[i].printData();
+        }
+    }
+}
+
+void titleSearch(task a[], string tmp, int n, bool check[], int choice){
+    res2 = -1;
+    for (int i = 0; i < n; i++){
+        if ((check[i] == false) && (a[i].title.find(tmp) != string::npos)){
+            res2 = i;
+            check[i] = true;
+            if (choice == 2) a[i].printData();
+        }
+    }
+}
+
+void prioSearch(task a[], string tmp, int n, bool check[], int choice){
+    res3 = -1;
+    for (int i = 0; i < n; i++){
+        if ((check[i] == false) && (a[i].priority.find(tmp) != string::npos)){
+            res3 = i;
+            check[i] = true;
+            if (choice == 2) a[i].printData();
+        }
+    }
+}
+
+void beginningDaySearch(task a[], string tmp, int n, bool check[], int choice){
+    res4 = -1;
+    for (int i = 0; i < n; i++){
+        if ((check[i] == false) && (a[i].beginningDay.find(tmp) != string::npos)){
+            res4 = i;
+            check[i] = true;
+            if (choice == 2) a[i].printData();
+        }
+    }
+}
+
+void endingDaySearch(task a[], string tmp, int n, bool check[], int choice){
+    res5 = -1;
+    for (int i = 0; i < n; i++){
+        if ((check[i] == false) && (a[i].endingDay.find(tmp) != string::npos)){
+            res5 = i;
+            check[i] = true;
+            if (choice == 2) a[i].printData();
+        }
+    }
+}
+
+void noteSearch(task a[], string tmp, int n, bool check[], int choice){
+    res6 = -1;
+    for (int i = 0; i < n; i++){
+        if ((check[i] == false) && (a[i].note.find(tmp) != string::npos)){
+            res6 = i;
+            check[i] = true;
+            if (choice == 2) a[i].printData();
+        }
+    }
+}
+
+
+//Tính năng tìm kiếm nè
+void firstFeature(task a[], string tmp, int n, int choice){
     for (int i = 0; i < n; i++){
         check[i] = false;
     }
 
-    tk_theo_trang_thai(a, tmp, n, check, choice);
+    sttSearch(a, tmp, n, check, choice);
+    titleSearch(a, tmp, n, check, choice);
+    prioSearch(a, tmp, n, check, choice);
+    beginningDaySearch(a, tmp, n, check, choice);
+    endingDaySearch(a, tmp, n, check, choice);
+    noteSearch(a, tmp, n, check, choice);
 
-    tk_theo_tieu_de(a, tmp, n, check, choice);
-
-    tk_theo_do_uu_tien(a, tmp, n, check, choice);
-
-    tk_theo_ngay_BD(a, tmp, n, check, choice);
-
-    tk_theo_ngay_KT(a, tmp, n, check, choice);
-
-    tk_theo_note(a, tmp, n, check, choice);
     if (choice == 1){
         ofstream output_file;
-   //     output_file.open("OFFICIAL.txt", ios::trunc);
-   //     output_file << "Thong tin danh sach cong viec:\n";
-    //    output_file.close();
-        cout_tieu_de();
+        titleFILE();
         for (int i = 0; i < n; i++){
-            cout << check[i] << " ";
+            //cout << check[i] << " ";
             if (check[i] == 1) {
-                
-        //        output_file.open("OFFICIAL.txt", ios::app);
-        //    for (int i = 0; i < n; i++){
-/*                output_file << "-----------------------------------\n";
-                output_file << "STT: " << i + 1 << "\n";
-                output_file << "Trang thai: " << a[i].trang_thai << '\n';
-                output_file << "Tieu de: " << a[i].tieu_de << '\n';
-                output_file << "Muc do quan trong: " << a[i].do_uu_tien << '\n';
-                output_file << "Ngay hien tai: " << a[i].bat_dau << '\n';
-                output_file << "Ngay ket thuc: " << a[i].ket_thuc << '\n';
-                output_file << "Ghi chu: " << a[i].note << '\n';    
-                output_file.close();*/
-                cout_co_noi_dung(a, i);
+                avaiDataFILE(a, i);
             }
         }
-        if (kq1 == -1 && kq2 == -1 && kq3 == -1 && kq4 == -1 && kq5 == -1 && kq6 == -1){
-/*                output_file.open("OFFICIAL.txt", ios::app);                
-                output_file << "-----------------------------------\n";
-                output_file << "Khong co ket qua ma ban muon tim kiem!!!\n";
-                output_file.close();*/
-            cout_Khong_KQ();
+        if (res1 == -1 && res2 == -1 && res3 == -1 && res4 == -1 && res5 == -1 && res6 == -1){
+            noResFILE();
         }
     }
     else if (choice == 2){
-        if (kq1 == -1 && kq2 == -1 && kq3 == -1 && kq4 == -1 && kq5 == -1 && kq6 == -1){
+        if (res1 == -1 && res2 == -1 && res3 == -1 && res4 == -1 && res5 == -1 && res6 == -1){
             cout << "-----------------------------------\n";
             cout << "Khong co ket qua ma ban muon tim kiem!!!\n";
         }
@@ -332,22 +386,22 @@ void CN_1(congviec a[], string tmp, int n, int choice){
 //=============================================================
 
 //========================Chuc nang THONG KE====================
-void CN_2(congviec a[], int n){
+void secFeature(task a[], int n){
     TT1 = 0; TT2 = 0; TT3 = 0; TT4 = 0; TT5 = 0;
     for (int i = 0; i < n; i++){
-        if (a[i].trang_thai == "Chua_hoan_thanh"){
+        if (a[i].status == "Chua hoan thanh"){
             TT1 += 1;
         }
-        if (a[i].trang_thai == "Dang_lam"){
+        if (a[i].status == "Dang lam"){
             TT2 += 1;
         }
-        if (a[i].trang_thai == "Hoan_thanh"){
+        if (a[i].status == "Hoan thanh"){
             TT3 += 1;
         }
-        if (a[i].trang_thai == "Bi_huy"){
+        if (a[i].status == "Bi huy"){
             TT4 += 1;
         }
-        if (a[i].trang_thai == "Qua_han"){
+        if (a[i].status == "Qua han"){
             TT5 += 1;
         }
     }
@@ -361,21 +415,21 @@ void CN_2(congviec a[], int n){
 //==================================================
 
 //================SAP XEP THEO DO QUAN TRONG=======
-bool cmp1(congviec a, congviec b){
+bool cmp1(task a, task b){
     return (a.mark < b.mark);
 }
 
-void CN_3(congviec a[], int n){
+void thirdFeature(task a[], int n){
     sort(a, a + n, cmp1);
 }
 //================================================
 
 //===================LOC THEO TRANG THAI====================
-bool cmp2(congviec a, congviec b){
+bool cmp2(task a, task b){
     return a.stt < b.stt;
 }
 
-int tknp_stt(int d, int c, int tmp, congviec a[]){
+int findPos1(int d, int c, int tmp, task a[]){
     if (d <= c){
         int mid = d + (c - d) / 2;
         if (a[mid].stt == tmp){
@@ -384,40 +438,39 @@ int tknp_stt(int d, int c, int tmp, congviec a[]){
             }
             return mid;
         }
-        else if (a[mid].stt < tmp) return (tknp_stt(mid + 1, c, tmp, a));
-        else if (a[mid].stt > tmp) return (tknp_stt(d, mid - 1, tmp, a));
+        else if (a[mid].stt < tmp) return (findPos1(mid + 1, c, tmp, a));
+        else if (a[mid].stt > tmp) return (findPos1(d, mid - 1, tmp, a));
     }
-    return -100;
+    return oo;
 }
 
-void CN_5_1(congviec a[], int tmp, int n, int choice){
+void filterStt(task a[], int tmp, int n, int choice){
     sort(a, a + n, cmp2);
-    int pos = tknp_stt(0, n - 1, tmp, a);
-    if (pos != -100) {
+    int pos = findPos1(0, n - 1, tmp, a);
+    if (pos != oo) {
         if (choice == 2) {
-            a[pos].in_thong_tin();
+            a[pos].printData();
         }
         else if (choice == 1) {
-            cout_tieu_de();
-//            cout << pos << " ";
-  //          cout << "\n";
-            cout_co_noi_dung(a, pos);
+            titleFILE();
+            avaiDataFILE(a, pos);
         }
 
         pos += 1;
         while (a[pos].stt == a[pos - 1].stt){
             if (choice == 2){
-                a[pos].in_thong_tin();
+                a[pos].printData();
             }
             else if (choice == 1){
-                cout_co_noi_dung(a, pos);
+                avaiDataFILE(a, pos);
             }
             pos += 1;
         }
     }
     else {
         if (choice == 1){
-            cout_Khong_KQ();
+            titleFILE();
+            noResFILE();
         }
         else if (choice == 2){ 
             cout << "Khong co ket qua can tim!!!\n";
@@ -427,7 +480,28 @@ void CN_5_1(congviec a[], int tmp, int n, int choice){
 //==================================================
 
 //================LOC THEO NGAY=====================
-bool cmp3(congviec a, congviec b){
+int day1 = 0, month1 = 0, year1 = 0;
+
+void analInp(string s1){ // Tách keyword ngày tháng năm đã nhập từ bàn phím thành số:))
+    day1 = 0, month1 = 0, year1 = 0;
+    int i = 0;
+    while (s1[i] != '/'){
+        day1 = day1 * 10 + (s1[i] - '0'); 
+        i++;
+    }
+    i++;
+    while (s1[i] != '/'){
+        month1 = month1 * 10 + (s1[i] - '0'); 
+        i++;
+    }
+    i++;
+    int j = i;
+    for (int j = i; j < s1.length(); j++){
+        year1 = year1 * 10 + (s1[j] - '0'); 
+    }        
+}
+
+bool cmp3(task a, task b){
     if (a.year != b.year) {
         return a.year < b.year;
     }
@@ -437,44 +511,68 @@ bool cmp3(congviec a, congviec b){
     else return a.day < b.day;
 }
 
-int tknp_DMY(int d, int c, string tmp, congviec a[]){
+bool cmp4(task a){
+    if (a.year != year1) {
+        return a.year < year1;
+    }
+    else if (a.month != month1){
+        return a.month < month1;
+    }
+    else return a.day < day1;
+}
+
+bool cmp5(task a){
+    if (a.year != year1) {
+        return a.year > year1;
+    }
+    else if (a.month != month1){
+        return a.month > month1;
+    }
+    else return a.day > day1;
+}
+
+int findPos2(int d, int c, string tmp, task a[]){
     if (d <= c){
         int mid = d + (c - d) / 2;
-        if (a[mid].ket_thuc == tmp){
-            while (mid - 1 >= 0 && a[mid - 1].ket_thuc == a[mid].ket_thuc){
+        if (a[mid].day == day1 && a[mid].month == month1 && a[mid].year == year1){
+          //  cout << "COOO\n";
+            while (mid - 1 >= 0 && a[mid - 1].endingDay == a[mid].endingDay){
                 mid--;
             }
             return mid;
         }
-        else if (a[mid].ket_thuc < tmp) return (tknp_DMY(mid + 1, c, tmp, a));
-        else if (a[mid].ket_thuc > tmp) return (tknp_DMY(d, mid - 1, tmp, a));
+        else if (cmp4(a[mid])) return (findPos2(mid + 1, c, tmp, a));
+        else if (cmp5(a[mid])) return (findPos2(d, mid - 1, tmp, a));
     }
-    return -100;
+    return oo;
 }
 
-void loc_theo_ngay(congviec a[], string tmp, int n, int choice){
-    int test = -1;
+
+
+void filterDay(task a[], string tmp, int n, int choice){
+   // int test = -1;
     sort(a, a + n, cmp3);
-    int pos = tknp_DMY(0, n - 1, tmp, a);
-    if (pos != -100) {
+    int pos = findPos2(0, n - 1, tmp, a);
+    //cout << pos << " === ";
+    if (pos != oo) {
 
         if (choice == 2) {
-            a[pos].in_thong_tin();
+            a[pos].printData();
         }
         else if (choice == 1) {
-            cout_tieu_de();
+            titleFILE();
 //            cout << pos << " ";
   //          cout << "\n";
-            cout_co_noi_dung(a, pos);
+            avaiDataFILE(a, pos);
         }
 
     pos += 1;
-    while (a[pos].ket_thuc == a[pos - 1].ket_thuc){       
+    while (a[pos].endingDay == a[pos - 1].endingDay){       
         if (choice == 2){
-            a[pos].in_thong_tin();
+            a[pos].printData();
         }
         else if (choice == 1){
-            cout_co_noi_dung(a, pos);
+            avaiDataFILE(a, pos);
         }
 
         pos += 1;
@@ -482,7 +580,8 @@ void loc_theo_ngay(congviec a[], string tmp, int n, int choice){
     }
     else {
         if (choice == 1){
-            cout_Khong_KQ();
+            titleFILE();
+            noResFILE();
         }
         else if (choice == 2){ 
             cout << "Khong co ket qua can tim!!!\n";
@@ -492,7 +591,7 @@ void loc_theo_ngay(congviec a[], string tmp, int n, int choice){
 //==================================================
 
 //=============LOC THEO DO QUAN TRONG================
-int tknp_mark(int d, int c, int tmp, congviec a[]){
+int findPos3(int d, int c, int tmp, task a[]){
     if (d <= c){
         int mid = d + (c - d) / 2;
         if (a[mid].mark == tmp){
@@ -501,41 +600,42 @@ int tknp_mark(int d, int c, int tmp, congviec a[]){
             }
             return mid;
         }
-        else if (a[mid].mark < tmp) return (tknp_mark(mid + 1, c, tmp, a));
-        else if (a[mid].mark > tmp) return (tknp_mark(d, mid - 1, tmp, a));
+        else if (a[mid].mark < tmp) return (findPos3(mid + 1, c, tmp, a));
+        else if (a[mid].mark > tmp) return (findPos3(d, mid - 1, tmp, a));
     }
-    return -100;
+    return oo;
 }
 
-void loc_theo_muc_do_qtrong(congviec a[], int tmp, int n, int choice){
+void filterPrio(task a[], int tmp, int n, int choice){
     sort(a, a + n, cmp1);
-    int pos = tknp_mark(0, n - 1, tmp, a);
-    if (pos != -100) {
+    int pos = findPos3(0, n - 1, tmp, a);
+    if (pos != oo) {
         
         if (choice == 2) {
-            a[pos].in_thong_tin();
+            a[pos].printData();
         }
         else if (choice == 1) {
-            cout_tieu_de();
+            titleFILE();
 //            cout << pos << " ";
   //          cout << "\n";
-            cout_co_noi_dung(a, pos);
+            avaiDataFILE(a, pos);
         }
 
         pos += 1;
         while (a[pos].mark == a[pos - 1].mark){
             if (choice == 2){
-                a[pos].in_thong_tin();
+                a[pos].printData();
             }
             else if (choice == 1){
-                cout_co_noi_dung(a, pos);
+                avaiDataFILE(a, pos);
             }
             pos += 1;
         }
     }
     else {
         if (choice == 1){
-            cout_Khong_KQ();
+            titleFILE();
+            noResFILE();
         }
         else if (choice == 2){ 
             cout << "Khong co ket qua can tim!!!\n";
@@ -544,121 +644,173 @@ void loc_theo_muc_do_qtrong(congviec a[], int tmp, int n, int choice){
 }
 //=============================================
 
-//=====qua int main() roi ne T^T
-int main(){
-    congviec a[1000];
-    int n = 0;
-    while(1){
-        cout <<"===============MENU================\n";
-        cout << "1: Them thong tin cong viec\n";
-        cout << "2: In danh sach cong viec\n";
-        cout << "3: Xoa 1 cong viec\n";
-        cout << "4: Chinh sua 1 cong viec\n";
-        cout << "5: Doc file txt\n";
-        cout << "6: Xuat file txt\n";
-        cout << "7: Tim kiem\n";
-        cout << "8: Thong ke\n";
-        cout << "9: Sap xep theo muc do quan trong\n";
-        cout << "10: CHUC NANG 5 - LOC THU 1\n";
-        cout << "11: CHUC NANG 5 - LOC THU 2\n";
-        cout << "12: CHUC NANG 5 - LOC THU 3\n";
-        cout << "0: Thoat\n";
-        cout <<"===================================\n";
-        cout << "Nhap lua chon: "; int chon; cin >> chon;
-
-        if (chon == 1){
-            a[n].them_thong_tin();
-            n++;
+int printMenu() {
+    cout << "*=============================MENU=============================*\n";
+    cout << "| [1]: Them thong tin cong viec tu ban phim                    |\n";
+    cout << "| [2]: In danh sach cong viec ra man hinh                      |\n";
+    cout << "| [3]: Xoa 1 cong viec                                         |\n";
+    cout << "| [4]: Chinh sua 1 cong viec                                   |\n";
+    cout << "| [5]: Them cong viec tu file INP                              |\n";
+    cout << "| [6]: In danh sach cong viec ra file TXT                      |\n";
+    cout << "| [7]: Tim kiem                                                |\n";
+    cout << "| [8]: Thong ke                                                |\n";
+    cout << "| [9]: Sap xep theo muc do quan trong                          |\n";
+    cout << "| [10]: Loc theo trang thai                                    |\n";
+    cout << "| [11]: Loc ra nhung cong viec phai xong trong ngay ban nhap   |\n";
+    cout << "| [12]: Loc theo muc do quan trong                             |\n";
+    cout << "| [0]: Thoat                                                   |\n";
+    cout << "*==============================================================*\n";
+    cout << "\n";
+    int choice = 0;
+    do {
+        cout << "Hay nhap lua chon: ";
+        cin >> choice;
+        if (choice < 0 || choice > 12) {
+            cout << "Lua chon khong hop le! Xin vui long nhap lai!!\n";
         }
-        if (chon == 2){
-        cout <<"===================================\n";
-            in_danh_sach(a, n);
-        }
-        if (chon == 3){
-            in_danh_sach(a, n);
-            cout << "\nNhap STT cua cong viec ma ban muon xoa: "; cin >> stt;
-            stt -= 1;
-            xoa(a, n, stt);
-        }
-        if (chon == 4){
-            //in danh sach de cho nguoi ta coi ne'
-            in_danh_sach(a, n);
-            //xu li
-            cout << "\nNhap STT cua cong viec ma ban muon chinh sua: "; cin >> stt;
-            stt -= 1;
-            chinhsua(a, stt);
-        }
-        if (chon == 5){//doc file
-            doc_du_lieu(a, n);
-        }
-        if (chon == 6){//xuat file
-            xuat_du_lieu(a, n);
-        }
-        if (chon == 7){//tim kiem theo keyword, nhap gi cx dc, kiem gi cx co'
-            string keyword;
-            cout << "Nhap tu khoa ban muon tim kiem: "; cin >> keyword;
-            cout << "Ban co muon xuat ket qua ra file TXT khong?\n";
-            cout << "1. Co\n";
-            cout << "2. Khong\n";
-            cout << "Moi nhap lua chon: "; int choice; cin >> choice;
-            CN_1(a, keyword, n, choice);
-        }
-        if (chon == 8){//Thong ke TRANG THAI
-            CN_2(a, n);
-        }
-        if (chon == 9){//sap xep theo muc do quan trong
-            CN_3(a, n);
-            in_danh_sach(a, n);
-        }
-        if (chon == 10){
-            cout << "\nLoc theo trang thai\n";
-            cout << "1: Chua hoan thanh\n";
-            cout << "2: Dang lam\n";
-            cout << "3: Hoan thanh\n";
-            cout << "4: Bi huy\n";
-            cout << "5: Qua han\n";
-            cout << "\nHay nhap so: ";
-            int tmp;
-            cin >> tmp;
-            cout << "\nBan co muon xuat ket qua ra file TXT khong?\n";
-            cout << "1. Co\n";
-            cout << "2. Khong\n";
-            cout << "Moi nhap lua chon: "; int choice; cin >> choice;
-            CN_5_1(a, tmp, n, choice); //xuli
-
-        }
-        if (chon == 11){//loc theo ngay bat ki
-            string s;
-            cout << "Nhap ngay ket thuc ban muon loc (DD/MM/YYYY): "; cin >> s;
-            for (int i = 0; i < n; i++){
-                a[i].phan_tich();
-            }
-            cout << "\nBan co muon xuat ket qua ra file TXT khong?\n";
-            cout << "1. Co\n";
-            cout << "2. Khong\n";
-            cout << "Moi nhap lua chon: "; int choice; cin >> choice;
-            
-            //YEU CAU NHAP DUNG DINH DANG DD/MM/YYYY
-            loc_theo_ngay(a, s, n, choice);
-        }
-        if (chon == 12){//Loc theo muc do quan trong
-            cout << "\nLoc theo muc do quan trong\n";
-            cout << "1: Cong viec phai xong trong ngay\n";
-            cout << "2: Cong viec phai xong trong ba ngay\n";
-            cout << "3: Cong viec phai xong trong tuan\n";
-            cout << "4: Cong viec phai xong trong hai tuan\n";
-            cout << "5: Cong viec phai xong trong thang\n";
-            cout << "Xin moi nhap lua chon: ";
-            int tmp;
-            cin >> tmp;
-            cout << "\nBan co muon xuat ket qua ra file TXT khong?\n";
-            cout << "1. Co\n";
-            cout << "2. Khong\n";
-            cout << "Moi nhap lua chon: "; int choice; cin >> choice;
-            loc_theo_muc_do_qtrong(a, tmp, n, choice);
-        }
-        else if (chon == 0){
+        else {
             break;
+        }
+    } while (true);
+
+    return choice;
+}
+
+// Trời ơi fix tới int main() lần nữa rồi T^T Kéo xuống tới đây lần thứ n rồi T_T
+int main(){
+    task a[10000];
+    int n = 0;
+
+    int userOption = 0;
+    bool mainLoopStop = false;
+    while (!mainLoopStop) {
+        userOption = printMenu();
+
+        switch (userOption) {
+            case (1): {
+                a[n].addData();
+                n++;
+                break;
+            }
+            case (2): {
+                cout <<"================================================\n";
+                printList(a, n);
+                break;
+            }
+            case (3): {
+                printList(a, n);
+                cout << "\nNhap STT cua cong viec ma ban muon xoa: "; cin >> ind;
+                ind -= 1;
+                removeData(a, n, ind);
+                cout << "\nThao tac thanh cong. <3\n"; 
+                cout << "\nVui long an 1 trong 2 phim sau de xem ket qua:\n";
+                cout << "[2]: In danh sach cong viec ra man hinh\n";
+                cout << "[6]: In danh sach cong viec ra FILE TXT\n";
+                break;
+            }
+            case (4): {
+                printList(a, n);
+                //xu li
+                cout << "\nNhap STT cua cong viec ma ban muon chinh sua: "; cin >> ind;
+                ind -= 1;
+                edit(a, ind);
+                break;
+            }
+            case (5): {            
+                readFILE(a, n);
+                break;
+            }
+            case (6): {
+                printFILE(a, n);
+                break;
+            }
+            case (7): { // chỉ cần nhập từ khóa, tìm gì cũng có miễn là nó có trong INP:)))
+                string keyword;
+                cout << "Nhap tu khoa ban muon tim kiem: "; cin.ignore(); getline(cin, keyword);
+                cout << "Ban muon xuat ket qua ra file TXT hay ra man hinh?\n";
+                cout << "[1]: File TXT\n";
+                cout << "[2]: Man hinh\n";
+                cout << "Moi nhap lua chon: "; int choice; cin >> choice;
+                firstFeature(a, keyword, n, choice);
+                break;
+            }
+            case (8): {
+                secFeature(a, n);
+                break;
+            }
+            case (9): {
+                thirdFeature(a, n);                
+                cout << "\nBan muon xuat ket qua ra file TXT hay ra man hinh?\n";
+                cout << "[1]: File TXT\n";
+                cout << "[2]: Man hinh\n";
+                cout << "Moi nhap lua chon: "; int choice; cin >> choice;
+                if (choice == 2) printList(a, n);
+                else if (choice == 1) printFILE(a,n);
+                break;
+            }
+            case (10): {
+                cout << "\nLoc theo trang thai\n";
+                cout << "[1]: Chua hoan thanh\n";
+                cout << "[2]: Dang lam\n";
+                cout << "[3]: Hoan thanh\n";
+                cout << "[4]: Bi huy\n";
+                cout << "[5]: Qua han\n";
+                cout << "\nHay nhap so: ";
+                int tmp;
+                cin >> tmp;
+                cout << "\nBan muon xuat ket qua ra file TXT hay ra man hinh?\n";
+                cout << "[1]: File TXT\n";
+                cout << "[2]: Man hinh\n";
+                cout << "Moi nhap lua chon: "; int choice; cin >> choice;
+                filterStt(a, tmp, n, choice); //xuli
+                break;
+            }
+            case (11): {//loc theo ngay bat ki
+                string s;
+                do {
+                    cout << "Nhap ngay ket thuc ban muon loc (DD/MM/YYYY): "; 
+                    cin >> s;
+                    analInp(s);
+                    if (day1 <= 0 || day1 >= 32 || month1 <= 0 || month1 >= 13 || year1 <= 0){
+                        cout << "\nDinh dang khong hop le! Xin vui long nhap dung dinh dang ngay/thang/nam!!\n";
+                    }
+                    else {
+                        break;
+                    }
+                } while (true);
+                for (int i = 0; i < n; i++){
+                    a[i].dateAnalysis();
+                }
+                cout << "\nBan muon xuat ket qua ra file TXT hay ra man hinh?\n";
+                cout << "[1]: File TXT\n";
+                cout << "[2]: Man hinh\n";
+                cout << "Moi nhap lua chon: "; int choice; cin >> choice;
+                
+                filterDay(a, s, n, choice);
+                break;
+            }
+            case (12): {//Loc theo muc do quan trong
+                cout << "\nLoc theo muc do quan trong\n";
+                cout << "[1]: Cong viec phai xong trong ngay\n";
+                cout << "[2]: Cong viec phai xong trong ba ngay\n";
+                cout << "[3]: Cong viec phai xong trong tuan\n";
+                cout << "[4]: Cong viec phai xong trong hai tuan\n";
+                cout << "[5]: Cong viec phai xong trong thang\n";
+                cout << "Xin moi nhap lua chon: ";
+                int tmp;
+                cin >> tmp;
+                cout << "\nBan muon xuat ket qua ra file TXT hay ra man hinh?\n";
+                cout << "[1]: File TXT\n";
+                cout << "[2]: Man hinh\n";
+                cout << "Moi nhap lua chon: "; int choice; cin >> choice;
+                filterPrio(a, tmp, n, choice);
+                break;
+            }
+
+            default: {
+                mainLoopStop = true;
+                break;
+            }
         }
     }
     return 0;
